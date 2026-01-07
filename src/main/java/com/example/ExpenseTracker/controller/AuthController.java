@@ -1,31 +1,30 @@
 package com.example.ExpenseTracker.controller;
 
+import com.example.ExpenseTracker.model.DTO.AuthResponse;
 import com.example.ExpenseTracker.model.DTO.LoginRequest;
 import com.example.ExpenseTracker.model.DTO.SignupRequest;
 import com.example.ExpenseTracker.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
-    // LOGIN
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        AuthResponse response = authService.login(request);
+        return ResponseEntity.ok(response);
     }
 
-    // SIGNUP
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
-        return ResponseEntity.ok(authService.signup(request));
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@RequestBody SignupRequest request) {
+        AuthResponse response = authService.signup(request);
+        return ResponseEntity.ok(response);
     }
 }
