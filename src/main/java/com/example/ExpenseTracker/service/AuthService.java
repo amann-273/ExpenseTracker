@@ -6,6 +6,7 @@ import com.example.ExpenseTracker.model.DTO.SignupRequest;
 import com.example.ExpenseTracker.model.User;
 import com.example.ExpenseTracker.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,46 +18,33 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    // LOGIN
     public AuthResponse login(LoginRequest request) {
+
         User user = userRepo.findByEmail(request.getEmail());
 
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+        if (user == null) {
+            throw new RuntimeException("User not found");
         }
 
-        String token = jwtService.generateToken(
-                org.springframework.security.core.userdetails.User
-                        .withUsername(user.getEmail())
-                        .password(user.getPassword())
-                        .authorities("USER")
-                        .build()
-        );
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
 
-        return new AuthResponse(token, user.getEmail());
+        String token = jwtService.generateToken(user);
+
+        return new AuthResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                token
+        );
     }
 
-    // SIGNUP
-    public AuthResponse signup(SignupRequest request) {
-        if (userRepo.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already registered");
-        }
-
+    public void signup(SignupRequest request) {
         User user = new User();
-        user.setName(request.getName());
+        user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
         userRepo.save(user);
-
-        String token = jwtService.generateToken(
-                org.springframework.security.core.userdetails.User
-                        .withUsername(user.getEmail())
-                        .password(user.getPassword())
-                        .authorities("USER")
-                        .build()
-        );
-
-        return new AuthResponse(token, user.getEmail());
     }
 }

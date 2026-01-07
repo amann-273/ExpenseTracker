@@ -1,33 +1,33 @@
 package com.example.ExpenseTracker.model;
 
+import com.example.ExpenseTracker.enums.ExpenseCategory;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Table(name = "expenses")
-@Data
+@Entity(name = "expenses")
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Entity
 public class Expense {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private ExpenseCategory category; // PERSONAL, SURVIVAL, INVESTMENT
+    private ExpenseCategory category;
 
     private double amount;
     private LocalDate date;
 
     @ManyToOne
-    private User user; // owner of this expense
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 }
-
-public enum ExpenseCategory {
-    PERSONAL, SURVIVAL, INVESTMENT
-}
-
-

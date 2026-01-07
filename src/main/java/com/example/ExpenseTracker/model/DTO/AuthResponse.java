@@ -1,13 +1,13 @@
 package com.example.ExpenseTracker.model.DTO;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class AuthResponse {
-    private String token;
+    private Long id;
+    private String username;
     private String email;
+    private String token;
 }
-
-
