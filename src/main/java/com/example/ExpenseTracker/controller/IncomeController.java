@@ -1,8 +1,8 @@
 package com.example.ExpenseTracker.controller;
 
-import com.example.ExpenseTracker.model.Expense;
+import com.example.ExpenseTracker.model.Income;
 import com.example.ExpenseTracker.model.User;
-import com.example.ExpenseTracker.repo.ExpenseRepo;
+import com.example.ExpenseTracker.repo.IncomeRepo;
 import com.example.ExpenseTracker.repo.UserRepo;
 import com.example.ExpenseTracker.service.PnlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/expense")
-public class ExpenseController {
+@RequestMapping("/api/income")
+public class IncomeController {
 
     @Autowired
-    private ExpenseRepo expenseRepo;
+    private IncomeRepo incomeRepo;
 
     @Autowired
     private UserRepo userRepo;
@@ -24,40 +24,40 @@ public class ExpenseController {
     @Autowired
     private PnlService pnlService;
 
-    // ✅ ADD EXPENSE (FIXED)
+    // ✅ ADD INCOME (FIXED)
     @PostMapping("/add")
-    public Expense addExpense(
-            @RequestBody Expense expense,
+    public Income addIncome(
+            @RequestBody Income income,
             Authentication authentication
     ) {
         String email = authentication.getName();   // from JWT
         User user = userRepo.findByEmail(email);
 
-        expense.setUser(user);                     // 🔥 FIX
-        return expenseRepo.save(expense);
+        income.setUser(user);                      // 🔥 FIX
+        return incomeRepo.save(income);
     }
 
-    // ✅ GET ALL EXPENSES OF LOGGED-IN USER
+    // ✅ GET MY INCOME
     @GetMapping("/my")
-    public List<Expense> getMyExpenses(Authentication authentication) {
+    public List<Income> getMyIncome(Authentication authentication) {
         String email = authentication.getName();
         User user = userRepo.findByEmail(email);
 
-        return expenseRepo.findByUser_Id(user.getId());
+        return incomeRepo.findByUser_Id(user.getId());
     }
 
-    // ✅ DELETE EXPENSE (OPTIONAL: ownership check later)
+    // ✅ DELETE INCOME
     @DeleteMapping("/{id}")
-    public void deleteExpense(@PathVariable Long id) {
-        expenseRepo.deleteById(id);
+    public void deleteIncome(@PathVariable Long id) {
+        incomeRepo.deleteById(id);
     }
 
-    // ✅ TOTAL EXPENSE OF LOGGED-IN USER
+    // ✅ TOTAL INCOME
     @GetMapping("/total")
-    public double getTotalExpense(Authentication authentication) {
+    public double getTotalIncome(Authentication authentication) {
         String email = authentication.getName();
         User user = userRepo.findByEmail(email);
 
-        return pnlService.getTotalExpense(user.getId());
+        return pnlService.getTotalIncome(user.getId());
     }
 }

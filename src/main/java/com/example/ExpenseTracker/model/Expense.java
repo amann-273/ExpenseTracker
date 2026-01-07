@@ -7,8 +7,8 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-
-@Entity(name = "expenses")
+@Entity
+@Table(name = "expenses")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,5 +29,6 @@ public class Expense {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
 
 }

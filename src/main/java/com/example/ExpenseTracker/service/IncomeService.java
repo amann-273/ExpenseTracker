@@ -18,7 +18,7 @@ public class IncomeService {
     }
 
     public List<Income> getIncomeByUser(Long userId) {
-        return incomeRepo.findByUserId(userId);
+        return incomeRepo.findByUser_Id(userId);
     }
 
     public void deleteIncome(Long id) {
