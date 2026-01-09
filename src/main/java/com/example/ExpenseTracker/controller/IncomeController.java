@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/income")
+@CrossOrigin(origins = "*")
 public class IncomeController {
 
     @Autowired

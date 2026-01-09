@@ -1,76 +1,67 @@
-// src/pages/Login.jsx
 import { useState } from "react";
-import { loginUser } from "../api/authApi";
-import "./Login.css";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
+import { loginUser } from "../api/auth";
+import "../styles/login.css";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+
     try {
-      const data = await loginUser(email, password);
+      const data = await loginUser({ email, password });
+
+      // 🔐 Store auth data
       localStorage.setItem("token", data.token);
-      localStorage.setItem("email", data.email);
-      alert("Login successful!");
-      window.location.href = "/expenses";
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/dashboard");
     } catch (err) {
-      setError("Invalid email or password");
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-200 to-blue-400">
-      <div className="bg-white rounded-2xl shadow-2xl p-10 max-w-sm w-full">
-        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Login</h2>
-        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+    <div className="login-container">
+      <form className="login-card" onSubmit={handleLogin}>
+        <h2>Login</h2>
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div className="relative">
-            <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
-            <input
-              type="email"
-              placeholder="Email"
-              className="pl-10 border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+        {error && <p className="error">{error}</p>}
 
-          <div className="relative">
-            <FaLock className="absolute left-3 top-3 text-gray-400" />
-            <input
-              type="password"
-              placeholder="Password"
-              className="pl-10 border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          required
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 font-semibold"
-          >
-            Login
-          </button>
-        </form>
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          required
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-        <p className="mt-6 text-center text-gray-600">
-          Don't have an account?{" "}
-          <a
-            href="/signup"
-            className="text-blue-500 hover:underline font-medium"
-          >
-            Sign up
-          </a>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+
+        <p className="switch">
+          Don’t have an account? <Link to="/signup">Signup</Link>
         </p>
-      </div>
+      </form>
     </div>
   );
 }
