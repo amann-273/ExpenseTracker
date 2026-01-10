@@ -1,8 +1,9 @@
 
+
 package com.example.ExpenseTracker.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+        import lombok.*;
 
 @Entity
 @Table(name = "users")

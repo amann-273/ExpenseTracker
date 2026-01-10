@@ -2,7 +2,9 @@ package com.example.ExpenseTracker.model;
 
 import com.example.ExpenseTracker.enums.IncomeSource;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -21,9 +23,15 @@ public class Income {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private IncomeSource source;
+    private IncomeSource source;   // MUST be provided
 
+    @Column(nullable = false)
     private double amount;
 
+    @Column(nullable = false)
     private LocalDate date;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

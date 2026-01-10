@@ -1,5 +1,7 @@
 package com.example.ExpenseTracker.service;
 
+import com.example.ExpenseTracker.model.Expense;
+import com.example.ExpenseTracker.model.Income;
 import com.example.ExpenseTracker.repo.ExpenseRepo;
 import com.example.ExpenseTracker.repo.IncomeRepo;
 import lombok.RequiredArgsConstructor;
@@ -12,15 +14,24 @@ public class PnlService {
     private final ExpenseRepo expenseRepo;
     private final IncomeRepo incomeRepo;
 
-    public double getTotalExpense(Long userId) {
-        return expenseRepo.sumExpenseByUser(userId);
+    // ✅ TOTAL EXPENSE (GLOBAL)
+    public double getTotalExpense() {
+        return expenseRepo.findAll()
+                .stream()
+                .mapToDouble(Expense::getAmount)
+                .sum();
     }
 
-    public double getTotalIncome(Long userId) {
-        return incomeRepo.sumIncomeByUser(userId);
+    // ✅ TOTAL INCOME (GLOBAL)
+    public double getTotalIncome() {
+        return incomeRepo.findAll()
+                .stream()
+                .mapToDouble(Income::getAmount)
+                .sum();
     }
 
-    public double calculateTotalPnL(Long userId) {
-        return getTotalIncome(userId) - getTotalExpense(userId);
+    // ✅ TOTAL PnL
+    public double calculateTotalPnL() {
+        return getTotalIncome() - getTotalExpense();
     }
 }
