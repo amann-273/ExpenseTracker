@@ -1,12 +1,10 @@
 package com.example.ExpenseTracker.model;
 
-import com.example.ExpenseTracker.enums.ExpenseCategory;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
+
 @Entity
 @Table(name = "expenses")
 @Getter
@@ -20,15 +18,10 @@ public class Expense {
 
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private ExpenseCategory category;
+    @Column(nullable = false)
+    private String category;
 
     private double amount;
+
     private LocalDate date;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-
 }

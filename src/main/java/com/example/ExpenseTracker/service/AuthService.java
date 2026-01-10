@@ -6,7 +6,6 @@ import com.example.ExpenseTracker.model.DTO.SignupRequest;
 import com.example.ExpenseTracker.model.User;
 import com.example.ExpenseTracker.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +19,15 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
 
-        User user = userRepo.findByEmail(request.getEmail());
+        String email = request.getEmail().trim().toLowerCase();
 
+        User user = userRepo.findByEmail(email);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("Invalid email or password");
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new RuntimeException("Invalid email or password");
         }
 
         String token = jwtService.generateToken(user.getEmail());
@@ -41,10 +41,18 @@ public class AuthService {
     }
 
     public void signup(SignupRequest request) {
+
+        String email = request.getEmail().trim().toLowerCase();
+
+        if (userRepo.existsByEmail(email)) {
+            throw new RuntimeException("Email already registered");
+        }
+
         User user = new User();
         user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
+        user.setEmail(email);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
         userRepo.save(user);
     }
 }

@@ -1,66 +1,65 @@
 package com.example.ExpenseTracker.service;
 
-import com.example.ExpenseTracker.enums.ExpenseCategory;
 import com.example.ExpenseTracker.model.Expense;
+import com.example.ExpenseTracker.model.User;
 import com.example.ExpenseTracker.repo.ExpenseRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.ExpenseTracker.repo.UserRepo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ExpenseService {
 
-    @Autowired
-    private ExpenseRepo expenseRepo;
+    private final ExpenseRepo expenseRepo;
+    private final UserRepo userRepo;
 
     // ✅ ADD EXPENSE
     public Expense addExpense(Expense expense) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userRepo.findByEmail(userDetails.getUsername());
+
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        expense.setId(null);
+        expense.setUser(user);
+        expense.setDate(LocalDate.now());
+
         return expenseRepo.save(expense);
     }
 
-    // ✅ GET ALL EXPENSES BY USER
-    public List<Expense> getExpensesByUser(Long userId) {
-        return expenseRepo.findByUser_Id(userId);
+    // ✅ GET ALL EXPENSES
+    public List<Expense> getAllExpenses() {
+        return expenseRepo.findAll();
     }
 
-    // ✅ SORT LOW → HIGH
-    public List<Expense> getExpensesLowToHigh(Long userId) {
-        return expenseRepo.findByUser_IdOrderByAmountAsc(userId);
+    // ✅ SORT BY AMOUNT
+    public List<Expense> getExpensesLowToHigh() {
+        return expenseRepo.findAllByOrderByAmountAsc();
     }
 
-    // ✅ SORT HIGH → LOW
-    public List<Expense> getExpensesHighToLow(Long userId) {
-        return expenseRepo.findByUser_IdOrderByAmountDesc(userId);
+    public List<Expense> getExpensesHighToLow() {
+        return expenseRepo.findAllByOrderByAmountDesc();
     }
 
     // ✅ FILTER BY CATEGORY
-    public List<Expense> getExpensesByCategory(
-            Long userId,
-            ExpenseCategory category) {
-
-        return expenseRepo.findByUser_IdAndCategory(userId, category);
+    public List<Expense> getExpensesByCategory(String category) {
+        return expenseRepo.findByCategory(category);
     }
 
-    // ✅ FILTER + SORT (LOW → HIGH)
-    public List<Expense> getExpensesByCategoryLowToHigh(
-            Long userId,
-            ExpenseCategory category) {
-
-        return expenseRepo
-                .findByUser_IdAndCategoryOrderByAmountAsc(userId, category);
-    }
-
-    // ✅ FILTER + SORT (HIGH → LOW)
-    public List<Expense> getExpensesByCategoryHighToLow(
-            Long userId,
-            ExpenseCategory category) {
-
-        return expenseRepo
-                .findByUser_IdAndCategoryOrderByAmountDesc(userId, category);
-    }
-
-    // ✅ DELETE EXPENSE
+    // ✅ DELETE
     public void deleteExpense(Long id) {
         expenseRepo.deleteById(id);
     }

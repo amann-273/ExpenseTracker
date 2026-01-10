@@ -1,3 +1,4 @@
+
 package com.example.ExpenseTracker.model;
 
 import jakarta.persistence.*;
@@ -15,11 +16,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String username;
 
+    @Column(nullable = false)
     private String password;
 }
 

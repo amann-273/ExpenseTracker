@@ -1,14 +1,11 @@
 package com.example.ExpenseTracker.controller;
 
 import com.example.ExpenseTracker.model.Income;
-import com.example.ExpenseTracker.model.User;
 import com.example.ExpenseTracker.repo.IncomeRepo;
-import com.example.ExpenseTracker.repo.UserRepo;
 import com.example.ExpenseTracker.service.PnlService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -16,35 +13,26 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class IncomeController {
 
-    @Autowired
-    private IncomeRepo incomeRepo;
+    private final IncomeRepo incomeRepo;
+    private final PnlService pnlService;
 
-    @Autowired
-    private UserRepo userRepo;
+    public IncomeController(IncomeRepo incomeRepo, PnlService pnlService) {
+        this.incomeRepo = incomeRepo;
+        this.pnlService = pnlService;
+    }
 
-    @Autowired
-    private PnlService pnlService;
-
-    // ✅ ADD INCOME (FIXED)
+    // ✅ ADD INCOME
     @PostMapping("/add")
-    public Income addIncome(
-            @RequestBody Income income,
-            Authentication authentication
-    ) {
-        String email = authentication.getName();   // from JWT
-        User user = userRepo.findByEmail(email);
-
-        income.setUser(user);                      // 🔥 FIX
+    public Income addIncome(@RequestBody Income income) {
+        income.setId(null);
+        income.setDate(LocalDate.now());
         return incomeRepo.save(income);
     }
 
-    // ✅ GET MY INCOME
-    @GetMapping("/my")
-    public List<Income> getMyIncome(Authentication authentication) {
-        String email = authentication.getName();
-        User user = userRepo.findByEmail(email);
-
-        return incomeRepo.findByUser_Id(user.getId());
+    // ✅ GET ALL INCOME
+    @GetMapping("/all")
+    public List<Income> getAllIncome() {
+        return incomeRepo.findAll();
     }
 
     // ✅ DELETE INCOME
@@ -55,10 +43,7 @@ public class IncomeController {
 
     // ✅ TOTAL INCOME
     @GetMapping("/total")
-    public double getTotalIncome(Authentication authentication) {
-        String email = authentication.getName();
-        User user = userRepo.findByEmail(email);
-
-        return pnlService.getTotalIncome(user.getId());
+    public double getTotalIncome() {
+        return pnlService.getTotalIncome();
     }
 }
