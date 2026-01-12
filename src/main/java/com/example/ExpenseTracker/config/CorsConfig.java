@@ -2,7 +2,9 @@ package com.example.ExpenseTracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.*;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
@@ -14,20 +16,21 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        // ✅ MUST be explicit (NO *)
-        config.setAllowedOrigins(
-                List.of("http://localhost:5500")
-        );
+        // ✅ MUST match browser origin EXACTLY
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5500",
+                "http://127.0.0.1:5500"
+        ));
 
-        // ✅ Allow common methods
-        config.setAllowedMethods(
-                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        );
+        // ✅ Required HTTP methods
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
 
-        // ✅ Allow all headers (Authorization included)
+        // ✅ Authorization, Content-Type, etc.
         config.setAllowedHeaders(List.of("*"));
 
-        // ✅ REQUIRED for JWT / OAuth
+        // ✅ Needed for JWT + OAuth redirect
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
@@ -37,4 +40,3 @@ public class CorsConfig {
         return source;
     }
 }
-

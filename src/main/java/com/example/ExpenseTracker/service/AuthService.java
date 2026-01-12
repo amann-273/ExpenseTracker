@@ -6,6 +6,7 @@ import com.example.ExpenseTracker.model.DTO.SignupRequest;
 import com.example.ExpenseTracker.model.User;
 import com.example.ExpenseTracker.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,11 @@ public class AuthService {
 
         User user = userRepo.findByEmail(email);
         if (user == null) {
-            throw new RuntimeException("Invalid email or password");
+            throw new BadCredentialsException("Invalid email or password");
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new BadCredentialsException("Invalid email or password");
         }
 
         String token = jwtService.generateToken(user.getEmail());
