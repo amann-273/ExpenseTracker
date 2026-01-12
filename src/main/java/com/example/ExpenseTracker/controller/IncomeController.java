@@ -26,22 +26,12 @@ public class IncomeController {
         this.userRepo = userRepo;
     }
 
-    // ✅ ADD INCOME
     @PostMapping("/add")
-    public Income addIncome(
-            @RequestBody Income income,
-            Authentication authentication
-    ) {
-        String email = authentication.getName();
-        User user = userRepo.findByEmail(email);
+    public Income addIncome(@RequestBody Income income, Authentication authentication) {
 
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        }
-
-        if (income.getSource() == null) {
-            throw new RuntimeException("Income source is required");
-        }
+        User user = userRepo.findByEmail(authentication.getName());
+        if (user == null) throw new RuntimeException("User not found");
+        if (income.getSource() == null) throw new RuntimeException("Income source is required");
 
         income.setId(null);
         income.setUser(user);
@@ -50,22 +40,33 @@ public class IncomeController {
         return incomeRepo.save(income);
     }
 
-
-    // ✅ GET ALL INCOME
     @GetMapping("/all")
-    public List<Income> getAllIncome() {
-        return incomeRepo.findAll();
+    public List<Income> getAllIncome(Authentication authentication) {
+
+        User user = userRepo.findByEmail(authentication.getName());
+        if (user == null) throw new RuntimeException("User not found");
+
+        return incomeRepo.findByUser(user);
     }
 
-    // ✅ DELETE INCOME
     @DeleteMapping("/{id}")
-    public void deleteIncome(@PathVariable Long id) {
-        incomeRepo.deleteById(id);
+    public void deleteIncome(@PathVariable Long id, Authentication authentication) {
+
+        User user = userRepo.findByEmail(authentication.getName());
+
+        Income income = incomeRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Income not found"));
+
+        if (!income.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        incomeRepo.delete(income);
     }
 
-    // ✅ TOTAL INCOME
+    // ✅ USER-SPECIFIC TOTAL
     @GetMapping("/total")
-    public double getTotalIncome() {
-        return pnlService.getTotalIncome();
+    public double getTotalIncome(Authentication authentication) {
+        return pnlService.getTotalIncome(authentication.getName());
     }
 }

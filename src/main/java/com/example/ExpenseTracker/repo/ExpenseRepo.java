@@ -1,6 +1,7 @@
 package com.example.ExpenseTracker.repo;
 
 import com.example.ExpenseTracker.model.Expense;
+import com.example.ExpenseTracker.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,8 +10,11 @@ import java.util.List;
 @Repository
 public interface ExpenseRepo extends JpaRepository<Expense, Long> {
 
-    // 🔹 All expenses
+    // 🔹 All expenses (DO NOT USE in controller anymore)
     List<Expense> findAll();
+
+    // 🔹 User-specific expenses ✅
+    List<Expense> findByUser(User user);
 
     // 🔹 Sort by amount
     List<Expense> findAllByOrderByAmountAsc();

@@ -26,22 +26,12 @@ public class ExpenseController {
         this.userRepo = userRepo;
     }
 
-    // ✅ ADD EXPENSE
     @PostMapping("/add")
-    public Expense addExpense(
-            @RequestBody Expense expense,
-            Authentication authentication
-    ) {
-        String email = authentication.getName();
-        User user = userRepo.findByEmail(email);
+    public Expense addExpense(@RequestBody Expense expense, Authentication authentication) {
 
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        }
-
-        if (expense.getCategory() == null) {
-            throw new RuntimeException("Expense category is required");
-        }
+        User user = userRepo.findByEmail(authentication.getName());
+        if (user == null) throw new RuntimeException("User not found");
+        if (expense.getCategory() == null) throw new RuntimeException("Expense category is required");
 
         expense.setId(null);
         expense.setUser(user);
@@ -50,22 +40,33 @@ public class ExpenseController {
         return expenseRepo.save(expense);
     }
 
-
-    // ✅ GET ALL EXPENSES
     @GetMapping("/all")
-    public List<Expense> getAllExpenses() {
-        return expenseRepo.findAll();
+    public List<Expense> getAllExpenses(Authentication authentication) {
+
+        User user = userRepo.findByEmail(authentication.getName());
+        if (user == null) throw new RuntimeException("User not found");
+
+        return expenseRepo.findByUser(user);
     }
 
-    // ✅ DELETE EXPENSE
     @DeleteMapping("/{id}")
-    public void deleteExpense(@PathVariable Long id) {
-        expenseRepo.deleteById(id);
+    public void deleteExpense(@PathVariable Long id, Authentication authentication) {
+
+        User user = userRepo.findByEmail(authentication.getName());
+
+        Expense expense = expenseRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+        if (!expense.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        expenseRepo.delete(expense);
     }
 
-    // ✅ TOTAL EXPENSE
+    // ✅ USER-SPECIFIC TOTAL
     @GetMapping("/total")
-    public double getTotalExpense() {
-        return pnlService.getTotalExpense();
+    public double getTotalExpense(Authentication authentication) {
+        return pnlService.getTotalExpense(authentication.getName());
     }
 }

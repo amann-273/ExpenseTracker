@@ -1,6 +1,7 @@
 package com.example.ExpenseTracker.controller;
 
 import com.example.ExpenseTracker.service.PnlService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,9 +15,8 @@ public class PnlController {
         this.pnlService = pnlService;
     }
 
-    // ✅ TOTAL PnL
     @GetMapping
-    public double getTotalPnL() {
-        return pnlService.calculateTotalPnL();
+    public double getTotalPnL(Authentication authentication) {
+        return pnlService.calculateTotalPnL(authentication.getName());
     }
 }
