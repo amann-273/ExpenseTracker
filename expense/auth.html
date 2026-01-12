@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Expense Tracker | Auth</title>
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="icon" href="data:,">
+</head>
+<body>
+
+<div class="auth-container">
+  <div class="card" id="card">
+
+    <!-- LOGIN -->
+    <div class="face front">
+      <h2>Login</h2>
+
+      <input type="email" id="loginEmail" placeholder="Email" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+
+      <!-- ERROR MESSAGE -->
+      <p id="loginError" class="error"></p>
+
+      <button onclick="login()">Login</button>
+
+      <button class="google" onclick="googleLogin()">
+        Continue with Google
+      </button>
+
+      <p>
+        Don’t have an account?
+        <span onclick="flip()">Signup</span>
+      </p>
+    </div>
+
+    <!-- SIGNUP -->
+    <div class="face back">
+      <h2>Signup</h2>
+
+      <input type="text" id="signupName" placeholder="Name" />
+      <input type="email" id="signupEmail" placeholder="Email" />
+      <input type="password" id="signupPassword" placeholder="Password" />
+
+      <button onclick="signup()">Signup</button>
+
+      <p>
+        Already have an account?
+        <span onclick="flip()">Login</span>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script src="auth.js"></script>
+</body>
+</html>

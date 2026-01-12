@@ -1,0 +1,263 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e5e7eb;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  padding: 0 16px;
+}
+
+/* BACK */
+.back {
+  color: #22c55e;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+/* TITLE */
+h1 {
+  text-align: center;
+  margin: 16px 0 24px;
+}
+
+/* FORM */
+.form {
+  background: #020617;
+  padding: 14px;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr 160px 160px auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form input,
+.form select {
+  height: 34px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.85rem;
+}
+
+.form button {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 6px;
+  border: none;
+  background: #22c55e;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form button:hover {
+  background: #16a34a;
+}
+
+/* FILTER */
+#filter {
+  width: 180px;
+  height: 34px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  border: none;
+}
+
+/* ENTRIES GRID */
+.entries {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+/* CARD */
+.card {
+  background: #020617;
+  padding: 14px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.card .category {
+  font-size: 0.7rem;
+  color: #22c55e;
+  margin-top: 4px;
+}
+
+.card .date {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.card .amount {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-weight: 700;
+}
+
+.card button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 10px;
+  padding: 4px 7px;
+  cursor: pointer;
+}
+
+
+/* FORM CARD */
+.form-card,
+.filter-card {
+  background: #020617;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+.section-title {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: #cbd5f5;
+}
+
+/* FORM ROW */
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row input,
+.form-row select {
+  height: 36px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  flex: 1;
+}
+
+.form-row button {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 6px;
+  border: none;
+  background: #22c55e;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-row button:hover {
+  background: #16a34a;
+}
+
+/* FILTER */
+.filter-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+.filter-card select {
+  width: 200px;
+  height: 34px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.filter-grid label {
+  display: block;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.filter-grid input,
+.filter-grid select {
+  width: 100%;
+  height: 34px;
+  border-radius: 6px;
+  border: none;
+  padding: 6px 8px;
+}
+
+/* RESET BUTTON – refined like Add button */
+.reset-btn {
+  height: 36px;              /* same height */
+  padding: 0 12px;           /* ⬅️ width kam */
+  min-width: 90px;           /* ⬅️ controlled size */
+  border-radius: 6px;
+  border: none;
+  background: #22c55e;       /* same green */
+  color: #020617;            /* ⬅️ BLACK TEXT */
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  background: #16a34a;
+}
+
+/* FILTER ROW WITH LABELS */
+.filter-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.filter-item label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.filter-item select,
+.filter-item input {
+  height: 36px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+}
+
+/* RESET ALIGNMENT */
+.filter-reset {
+  flex: 0;
+}

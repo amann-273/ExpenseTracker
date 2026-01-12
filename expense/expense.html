@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Expense</title>
+  <link rel="stylesheet" href="entry.css" />
+</head>
+<body>
+
+<div class="page">
+  <div class="container">
+
+    <a class="back" href="dashboard.html">← Back to Dashboard</a>
+
+    <h1 class="title">Expense</h1>
+
+    <!-- ADD EXPENSE FORM -->
+    <section class="form-card">
+      <h3 class="section-title">Add Expense</h3>
+
+      <div class="form-row">
+        <input id="description" placeholder="Description" />
+        <input id="amount" type="number" placeholder="₹ Amount" />
+        <select id="category">
+          <option>PERSONAL</option>
+          <option>HOUSEHOLD</option>
+          <option>MISC</option>
+        </select>
+        <button id="addBtn">Add</button>
+      </div>
+    </section>
+
+    <!-- FILTER + SORT -->
+<section class="filter-card">
+  <h3 class="section-title">Filters & Sorting</h3>
+
+  <div class="filter-row">
+    <div class="filter-item">
+      <label>By Category</label>
+      <select id="filterCategory">
+        <option>ALL</option>
+        <option>PERSONAL</option>
+        <option>HOUSEHOLD</option>
+        <option>MISC</option>
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label>From Date</label>
+      <input type="date" id="fromDate" />
+    </div>
+
+    <div class="filter-item">
+      <label>To Date</label>
+      <input type="date" id="toDate" />
+    </div>
+
+    <div class="filter-item">
+      <label>Sort By</label>
+      <select id="sortBy">
+        <option value="new">Newest First</option>
+        <option value="old">Oldest First</option>
+        <option value="amountAsc">Amount ↑</option>
+        <option value="amountDesc">Amount ↓</option>
+      </select>
+    </div>
+
+    <div class="filter-item filter-reset">
+      <label>&nbsp;</label>
+      <button class="reset-btn" id="resetFilters">Reset</button>
+    </div>
+  </div>
+</section>
+
+
+    <!-- ENTRIES -->
+    <div class="entries" id="list"></div>
+
+  </div>
+</div>
+
+<script src="expense.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Expense Tracker | Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="icon" href="data:,">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="logo">ExpenseTracker</h2>
+
+    <nav>
+      <a class="nav-item active">Dashboard</a>
+      <a class="nav-item income">Income</a>
+      <a class="nav-item expense">Expense</a>
+    </nav>
+
+    <div class="user-box">
+      <span id="username">User</span>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <h1>Dashboard</h1>
+
+    <div class="cards">
+      <div class="card income-card">
+        <h3>Total Income</h3>
+        <p id="totalIncome">₹0</p>
+      </div>
+
+      <div class="card expense-card">
+        <h3>Total Expense</h3>
+        <p id="totalExpense">₹0</p>
+      </div>
+
+      <div class="card pnl-card">
+        <h3>Profit / Loss</h3>
+        <p id="pnl">₹0</p>
+      </div>
+    </div>
+
+    <!-- RECENT ENTRIES -->
+    <div class="cards">
+
+      <div class="card">
+        <h3>Recent Income</h3>
+        <ul id="recentIncome"></ul>
+      </div>
+
+      <div class="card">
+        <h3>Recent Expense</h3>
+        <ul id="recentExpense"></ul>
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
