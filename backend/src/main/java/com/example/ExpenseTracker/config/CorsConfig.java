@@ -16,10 +16,9 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        // ✅ MUST match browser origin EXACTLY
+        // ✅ MUST match frontend container origin EXACTLY
         config.setAllowedOrigins(List.of(
-                "http://localhost:5500",
-                "http://127.0.0.1:5500"
+                "http://localhost:3000"
         ));
 
         // ✅ Required HTTP methods
@@ -27,10 +26,10 @@ public class CorsConfig {
                 "GET", "POST", "PUT", "DELETE", "OPTIONS"
         ));
 
-        // ✅ Authorization, Content-Type, etc.
+        // ✅ Allow all headers (Authorization, Content-Type, etc.)
         config.setAllowedHeaders(List.of("*"));
 
-        // ✅ Needed for JWT + OAuth redirect
+        // ✅ REQUIRED for JWT + OAuth redirects
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
